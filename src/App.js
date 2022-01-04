@@ -16,31 +16,33 @@ function App() {
     var Value_temp = message_json['data']['temp']
     var Value_Hum = message_json['data']['humid']
     setValue_Hum (message_json['data']['humid'])
-    if (Value_temp >= 0) {
+    cal_realfeel(Value_temp,Value_Hum)
+    
+    if (Value_temp_calfeel >= 0) {
       setColor("white")
       setStatus("อย่างกับอยู่ขั้วโลกเหนือ บึ๋ยยยย")
       setEmoji("🥶")
-      cal_realfeel(Value_temp,Value_Hum)
-    } if (Value_temp >= 20) {
+      
+    } if (Value_temp_calfeel >= 20) {
       setColor("#AAD062")
       setStatus("หนาวเป็นน้ำเเข็งเเล้ว")
       setEmoji("😆")
-       cal_realfeel(Value_temp,Value_Hum)
-    } if (Value_temp >= 25) {
+     
+    } if (Value_temp_calfeel >= 25) {
       setColor("#F8D45D")
       setStatus("เย็นกำลังดี")
       setEmoji("😊")
-      cal_realfeel(Value_temp,Value_Hum)
-    } if (Value_temp >= 30) {
+     
+    } if (Value_temp_calfeel >= 30) {
       setColor("#FB9A51")
       setStatus("ร้อนมากเลย")
       setEmoji("😕")
-      cal_realfeel(Value_temp,Value_Hum)
-    } if (Value_temp >= 35) {
+      
+    } if (Value_temp_calfeel >= 35) {
       setColor("#F76669")
       setStatus("ขอร่มที ร้อนไม่ไหว")
       setEmoji("😖")
-      cal_realfeel(Value_temp,Value_Hum)
+      
     } 
     return true
   }
