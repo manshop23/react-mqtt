@@ -113,7 +113,12 @@ function App() {
   const [ms, setms] = useState("")
   const subTopic = "e775b1245d94ea4a79be6ce40cf96929"
   const broker = "hivemq"
-  var client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt")
+  var client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt",options)
+  var options={
+      retain:true,
+      qos:1,
+      clientId:"mqttjs01",
+      clean:true};
 
   client.subscribe(subTopic)
   client.on("message", function (topic, message) {
@@ -154,7 +159,7 @@ function App() {
         <h2>Subscribe Topic: {`${subTopic}`}</h2>
         <h3>Broker: {`${broker}`} </h3>
         <p>ข้อความธรรมดา: {message_string}</p>
-        <p>json Payload: {JSON.stringify(payload)}</p>
+        
         <div className="show" >
           <div className="temp_box" >
             <h5 style={{ margin: 0 }}>อุณหภูมิ: {Value_temp_cal} °C</h5>
@@ -175,6 +180,7 @@ function App() {
           <div className="Text_box" >
             <div className="social_layout" style={{ margin: 0 }}>{Value_social_text}</div>
           </div>
+          <p>json Payload: {JSON.stringify(payload)}</p>
         </div>
       </header>
     </div>
