@@ -11,39 +11,75 @@ function App() {
   function social_sceen (message_json){
     setValue_social_text  (message_json['data']['text'])
   }
-
-  function check_temporhum(message_json){
-    var Value_temp = message_json['data']['temp']
-    var Value_Hum = message_json['data']['humid']
-    setValue_Hum (message_json['data']['humid'])
-    cal_realfeel(Value_temp,Value_Hum)
+  
+  function temporhumScreen_show(message_json){
+    //จะให้ station ไหน ขึ้นจอบ้างใส่ใน list ได้เลย
+    var screen_01 = ["station001"]
+    var screen_02 = ["station002"]
+     
+    var name = message_json['name']
+    var temp = message_json['data']['temp']
+    var hum = message_json['data']['humid']
+    var temp_feel_1 = 0.0
+    var temp_feel_2 = 0.0
+    if(screen_01.includes(name)){
+      setValue_name_scrren_01(name)
+      setValue_temp_scrren_01(temp)
+      setValue_hum_scrren_01(hum)
+      temp_feel_1 = cal_realfeel(temp,hum)
+      setValue_temp_feel_scrren_01(temp_feel_1)
+      
+    }
+    if(screen_02.includes(name)){
+      setValue_name_scrren_02(name)
+      setValue_temp_scrren_02(temp)
+      setValue_hum_scrren_02(hum)
+      temp_feel_2 = cal_realfeel(temp,hum)
+      setValue_temp_feel_scrren_02(temp_feel_2)
+    }
     
-    if (Value_temp_calfeel >= 0) {
-      setColor("white")
-      setStatus("อย่างกับอยู่ขั้วโลกเหนือ บึ๋ยยยย")
-      setEmoji("🥶")
+  }
+
+  function check_temporhum(temp_feel_1,temp_feel_2){
+    temp_calfeel = 0
+    // temporhumScreen_show(message_json)
+  //  console.log(temp_feel_1)
+    // if (temp_feel_1 != "" && temp_feel_2 != ""){
+    //   var temp_calfeel = ((temp_feel_1 + temp_feel_2)/2)
+      var temp_calfeel = temp_feel_1
       
-    } if (Value_temp_calfeel >= 20) {
-      setColor("#AAD062")
-      setStatus("หนาวเป็นน้ำเเข็งเเล้ว")
-      setEmoji("😆")
-     
-    } if (Value_temp_calfeel >= 25) {
-      setColor("#F8D45D")
-      setStatus("เย็นกำลังดี")
-      setEmoji("😊")
-     
-    } if (Value_temp_calfeel >= 30) {
-      setColor("#FB9A51")
-      setStatus("ร้อนมากเลย")
-      setEmoji("😕")
+      if (temp_calfeel < 0) {
+        setColor("#7900FF")
+        setStatus("เเข็งไปทั้งตัว ทั้งหัวใจ")
+        setEmoji("🥶")
+        
+      } if (temp_calfeel >= 0) {
+        setColor("#516BEB")
+        setStatus("อย่างกับอยู่ขั้วโลกเหนือ บึ๋ยยยย")
+        setEmoji("🥶")
+        
+      } if (temp_calfeel >= 20) {
+        setColor("#84DFFF")
+        setStatus("หนาวเป็นน้ำเเข็งเเล้ว")
+        setEmoji("😆")
       
-    } if (Value_temp_calfeel >= 35) {
-      setColor("#F76669")
-      setStatus("ขอร่มที ร้อนไม่ไหว")
-      setEmoji("😖")
+      } if (temp_calfeel >= 25) {
+        setColor("#F8D45D")
+        setStatus("เย็นกำลังดี")
+        setEmoji("😊")
       
-    } 
+      } if (temp_calfeel >= 30) {
+        setColor("#FB9A51")
+        setStatus("ร้อนมากเลย")
+        setEmoji("😕")
+        
+      } if (temp_calfeel >= 35) {
+        setColor("#F76669")
+        setStatus("ขอร่มที ร้อนไม่ไหว")
+        setEmoji("😖")
+        
+      }
+    // }   
     return true
   }
 
@@ -54,9 +90,9 @@ function App() {
     var realfeel = 0
     var realfeel = (-42.379) + (2.04901523 * tf) + (10.14333127 * h) - (0.22475541 * tf * h) - (6.83783 * Math.pow(10, -3) * Math.pow(tf, 2)) - (5.481717 * Math.pow(10, -2) * Math.pow(h, 2)) + (1.22874 * Math.pow(10, -3) * Math.pow(tf, 2) * h) + (8.5282 * Math.pow(10, -4) * tf * Math.pow(h, 2)) - (1.99 * Math.pow(10, -6) * Math.pow(tf, 2) * Math.pow(h, 2));
     var realfeel = parseFloat((realfeel - 32) / 1.80).toFixed( 1 );
-    setValue_temp_cal(t)
-    setValue_temp_calfeel(realfeel)
-    return true
+    // setValue_temp_cal(t)
+    // setValue_temp_calfeel(realfeel)
+    return realfeel
   }
 
   function check_type_message(topic,message){
@@ -78,7 +114,9 @@ function App() {
             // setValue_temp (parseFloat(message_json['t']))
             // setValue_Hum (parseFloat(message_json['h']))
             if (message_json['type'] == "weather"){
-              check_temporhum(message_json)
+              // check_temporhum(message_json)
+              temporhumScreen_show(message_json)
+              
             }
             if (message_json['type'] == "pm25"){
               pm25_sceen (message_json)
@@ -99,6 +137,18 @@ function App() {
     }
   }
   
+  //โค็ดสำหรับเซ็ตค่าออกจอ 1
+  const [Value_name_scrren_01, setValue_name_scrren_01] = useState("กำลังเชื่อมต่อสถานี")
+  const [Value_temp_scrren_01, setValue_temp_scrren_01] = useState(-1)
+  const [Value_hum_scrren_01, setValue_hum_scrren_01] = useState(-1)
+  const [Value_temp_feel_scrren_01, setValue_temp_feel_scrren_01] = useState(-1)
+
+  //โค็ดสำหรับเซ็ตค่าออกจอ 2
+  const [Value_name_scrren_02, setValue_name_scrren_02] = useState("กำลังเชื่อมต่อสถานี")
+  const [Value_temp_scrren_02, setValue_temp_scrren_02] = useState(-1)
+  const [Value_hum_scrren_02, setValue_hum_scrren_02] = useState(-1)
+  const [Value_temp_feel_scrren_02, setValue_temp_feel_scrren_02] = useState(-1)
+
   const [message_string, setmessage_string] = useState("")
   const [Value_social_text, setValue_social_text] = useState("")
   const [Value_pm25, setValue_pm25] = useState(-1)
@@ -124,8 +174,8 @@ function App() {
   client.on("message", function (topic, message) {
     //รับค่ามาปกติเเปลงเป็น string 
     // message = message.toString()
-    console.log(message)
-    console.log(typeof(message))
+    // console.log(message)
+    // console.log(typeof(message))
     check_type_message(topic,message)
     // if (message != " " ){
     //   if(typeof(message) == "object"){
@@ -143,10 +193,13 @@ function App() {
   })
   
   //เมื่อค่าที่อยู่ใน [xxx] มีการเปลี่ยนเเปลงให้ทำอะไรต่อไปนี้...
-  // useEffect(() => {
-  //   check_temporhum(Value_temp,Value_Hum)
-  // }, [Value_temp])
+  useEffect(() => {
+    check_temporhum(Value_temp_scrren_01,Value_temp_scrren_02)
+  }, [Value_temp_scrren_01])
 
+  // useEffect(() => {
+  //   check_temporhum(Value_temp_feel_scrren_01,Value_temp_feel_scrren_02)
+  // }, [Value_temp_feel_scrren_02])
   // useEffect(() => {
   //   check_temporhum(Value_temp,Value_Hum)
   // }, [Value_Hum])
@@ -162,12 +215,25 @@ function App() {
         
         <div className="show" >
           <div className="temp_box" >
-            <h5 style={{ margin: 0 }}>อุณหภูมิ: {Value_temp_cal} °C</h5>
+            <h5 style={{ margin: 0 }}>สถานี: {Value_name_scrren_01}</h5>
             <br></br>
-            <h5 style={{ margin: 0 }}>ความรู้สึกจริง: {Value_temp_calfeel} °C</h5>
+            <h5 style={{ margin: 0 }}>อุณหภูมิ: {Value_temp_scrren_01} °C </h5>
+            <br></br>
+            <h5 style={{ margin: 0 }}>ความชื้น: {Value_hum_scrren_01} %</h5>
+            <br></br>
+            <h5 style={{ margin: 0 }}>ความรู้สึกจริง: {Value_temp_feel_scrren_01} °C</h5>
+          </div>
+          <div className="temp_box" >
+            <h5 style={{ margin: 0 }}>สถานี: {Value_name_scrren_02}</h5>
+            <br></br>
+            <h5 style={{ margin: 0 }}>อุณหภูมิ: {Value_temp_scrren_02} °C </h5>
+            <br></br>
+            <h5 style={{ margin: 0 }}>ความชื้น: {Value_hum_scrren_02} %</h5>
+            <br></br>
+            <h5 style={{ margin: 0 }}>ความรู้สึกจริง: {Value_temp_feel_scrren_02} °C</h5>
           </div>
           <div className="hum_box" >
-            <h5 style={{ margin: 0 }}>ความชื้น: {Value_Hum} %</h5>
+            
             <br></br>
             <h5 style={{ margin: 0 }}>PM2.5: {Value_pm25} AQI</h5>
           </div>
@@ -177,11 +243,13 @@ function App() {
             <br></br>
             <div className="emoji_layout" >{emoji}</div>
           </div>
-          <div className="Text_box" >
-            <div className="social_layout" style={{ margin: 0 }}>{Value_social_text}</div>
-          </div>
-          <p>json Payload: {JSON.stringify(payload)}</p>
+          
+          
         </div>
+        <div className="Text_box" >
+            <div className="social_layout" style={{ margin: 0 }}>{Value_social_text}</div>
+        </div>
+        <p>json Payload: {JSON.stringify(payload)}</p>
       </header>
     </div>
   )

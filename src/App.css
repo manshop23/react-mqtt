@@ -41,12 +41,13 @@
 }
 
 .temp_box{
+  
   border-radius: 20px;
   padding: 20px;
   margin: 10px;
   width: 220px;
-  height: 90px;
-  background-color: #A3DA8D;
+  height: 250px;
+  background-color: #FEE3EC;
   float: left;
 }
 
@@ -57,7 +58,7 @@
   padding: 20px;
   width: 220px;
   height: 90px;
-  background-color: #A3DA8D;
+  background-color: #C2FFF9;
   float: left;
 }
 
@@ -68,8 +69,8 @@
   border-radius: 20px;
   margin: 10px;
   padding: 20px;
-  width: 550px;
-  height: 90px;
+  width: 1000px;
+  height: 100px;
   background-color: #FFF1BD;
   float: left;
 }
